@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rice Drying Prediction Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    label, p {
+      margin: 10px 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .results {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2> INESAM SHOP RICE PREDICTING TOOL</h2>
+    <form id="riceForm">
+      <label for="initialWeight">Initial Weight (kg):</label>
+      <input type="number" id="initialWeight" required>
+
+      <label for="initialMoisture">Initial Moisture Content (%):</label>
+      <input type="number" id="initialMoisture" required>
+
+      <label for="finalMoisture">Final Moisture Content (%):</label>
+      <input type="number" id="finalMoisture" value="14" required>
+
+      <button type="button" onclick="predictResults()">Calculate</button>
+    </form>
+    <div class="results" id="results">
+      <p><strong>Results:</strong></p>
+      <p>Moisture Removed: <span id="moistureRemoved">0</span> kg</p>
+      <p>Final Weight: <span id="finalWeight">0</span> kg</p>
+    </div>
+  </div>
+  <script>
+    function predictResults() {
+      // Get input values
+      const initialWeight = parseFloat(document.getElementById("initialWeight").value);
+      const initialMoisture = parseFloat(document.getElementById("initialMoisture").value);
+      const finalMoisture = parseFloat(document.getElementById("finalMoisture").value);
+
+      // Validate input
+      if (isNaN(initialWeight) || isNaN(initialMoisture) || isNaN(finalMoisture)) {
+        alert("Please enter valid values.");
+        return;
+      }
+
+      // Calculate initial water content and dry matter
+      const initialWaterContent = initialWeight * (initialMoisture / 100);
+      const dryMatter = initialWeight - initialWaterContent;
+
+      // Calculate final weight and moisture removed
+      const finalWeight = dryMatter / (1 - finalMoisture / 100);
+      const moistureRemoved = initialWaterContent - (finalWeight * (finalMoisture / 100));
+
+      // Display results
+      document.getElementById("moistureRemoved").textContent = moistureRemoved.toFixed(2);
+      document.getElementById("finalWeight").textContent = finalWeight.toFixed(2);
+    }
+  </script>
+</body>
+</html>
